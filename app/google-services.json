@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "269350781285",
+    "project_id": "tasks-alarm",
+    "storage_bucket": "tasks-alarm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269350781285:android:f6e34d12de17c28da6a18c",
+        "android_client_info": {
+          "package_name": "com.vetsb.tasksalarm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269350781285-tb4fp1mda0slenhgghcd1p9t3h84a0gl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoTpjcCFLphyBjYe-xhya4ZUqCOrKqEwY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269350781285-tb4fp1mda0slenhgghcd1p9t3h84a0gl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

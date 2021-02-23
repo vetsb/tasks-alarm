@@ -1,0 +1,154 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "kotlin-kapt"
+    id "kotlin-android-extensions"
+    id "checkstyle"
+}
+
+apply plugin: "io.gitlab.arturbosch.detekt"
+
+configurations {
+    ktlint
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+    defaultConfig {
+        applicationId "com.vetsb.tasksalarm"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled = true
+        vectorDrawables.useSupportLibrary = true
+        resConfigs "ru"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), '../config/proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation project(path: ":googlecloudtts")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "androidx.core:core-ktx:1.3.2"
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.2"
+    implementation "androidx.lifecycle:lifecycle-process:2.3.0"
+
+    def lifecycle_version = "2.2.0"
+
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    implementation "com.jakewharton.threetenabp:threetenabp:1.3.0"
+
+    implementation "org.koin:koin-core:$koin_version"
+    implementation "org.koin:koin-core-ext:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+
+    def preference_version = "1.1.1"
+
+    implementation "androidx.preference:preference-ktx:$preference_version"
+    implementation platform("com.google.firebase:firebase-bom:26.5.0")
+    implementation "com.google.firebase:firebase-analytics-ktx"
+    implementation "com.google.firebase:firebase-config-ktx"
+    implementation "com.google.firebase:firebase-crashlytics-ktx"
+    implementation "com.jakewharton.timber:timber:4.7.1"
+    implementation "com.google.code.gson:gson:2.8.6"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.4"
+
+    implementation "androidx.activity:activity-ktx:1.3.0-alpha04"
+    implementation "androidx.fragment:fragment-ktx:1.3.1"
+    ktlint "com.pinterest:ktlint:0.36.0"
+    checkstyle "com.puppycrawl.tools:checkstyle:8.28"
+}
+
+apply plugin: "com.google.gms.google-services"
+
+apply plugin: "com.google.firebase.crashlytics"
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "--reporter=plain"
+    args "--reporter=checkstyle,output=${buildDir}/reports/ktlint/ktlint.xml"
+    args "src/**/*.kt"
+}
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "-F", "src/**/*.kt"
+}
+
+def qualityConfigDir = "$project.rootDir/config/quality"
+def reportsDir = "$project.buildDir/reports"
+
+check.dependsOn 'checkstyle'
+
+task checkstyle(type: Checkstyle, group: 'Verification', description: 'Runs code style checks') {
+    configFile file("$qualityConfigDir/checkstyle/checkstyle-config.xml")
+    source 'src'
+    include '**/*.xml'
+    include '**/*.kt'
+    exclude '**/gen/**'
+    exclude '**/R.java'
+    exclude '**/BuildConfig.java'
+
+    reports {
+        xml.enabled = true
+        xml {
+            destination file("$reportsDir/checkstyle/checkstyle.xml")
+        }
+    }
+
+    classpath = files()
+}
+detekt {
+    toolVersion = "1.7.0"
+    input = files("src/main/kotlin")
+    config = files("$projectDir/../config/quality/detekt.yml")
+    reports {
+        xml {
+            enabled = true
+            destination = file("$projectDir/build/reports/detekt/detekt-report.xml")
+        }
+        html {
+            enabled = true
+            destination = file("$projectDir/build/reports/detekt/detekt-report.html")
+        }
+    }
+}
+
+task checkBeforePush(
+        group: 'verification',
+        description: 'Inspect your code before push'
+) {
+    dependsOn 'checkstyle', 'detekt', 'ktlint', 'lintDebug'
+}
+
+task checkBeforePushFast(
+        group: 'verification',
+        description: 'Inspect your code before push'
+) {
+    dependsOn 'checkstyle', 'detekt', 'ktlint'
+}

@@ -1,0 +1,3 @@
+package com.vetsb.tasksalarm.root.presentation.command
+
+object RequestNotificationPermissionCommand

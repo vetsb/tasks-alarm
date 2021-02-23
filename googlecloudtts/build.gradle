@@ -1,0 +1,38 @@
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
+}
+
+android {
+    compileSdkVersion 30
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0.0"
+    }
+    buildTypes {
+        def googleCloudTtsApiKey = System.getenv("GOOGLE_CLOUD_API_KEY")
+
+        debug {
+            buildConfigField "String", "API_KEY", "\"$googleCloudTtsApiKey\""
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "../config/proguard-rules.pro"
+            buildConfigField "String", "API_KEY", "\"$googleCloudTtsApiKey\""
+        }
+    }
+    compileOptions {
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation "com.squareup.okhttp3:okhttp:4.9.0"
+    implementation "com.google.code.gson:gson:2.8.6"
+}

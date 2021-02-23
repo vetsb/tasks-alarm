@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">tasks-alarm</string>
+    <string name="tasks_speaker_channel_name">Спикер задач</string>
+    <string name="tasks_speaker_channel_description">Уведомляет о работе спикера задач во время ежедневного напоминания</string>
+    <string name="tasks_speaker_notification_action_stop">Остановить</string>
+    <string name="tasks_speaker_notification_text">Доброе утро! Нажмите, чтобы остановить спикер</string>
+</resources>

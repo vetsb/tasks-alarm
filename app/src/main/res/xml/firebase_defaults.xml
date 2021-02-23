@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>alarm_applications</key>
+        <value>
+            ["com.google.android.deskclock","com.alarmclock.xtreme.free","com.apalon.myclockfree","com.droid27.transparentclockweather","droom.sleepIfUCan","ar.com.basejuegos.simplealarm","ch.bitspin.timely"]
+        </value>
+    </entry>
+</defaultsMap>
