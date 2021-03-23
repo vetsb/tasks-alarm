@@ -8,6 +8,5 @@
 - TickTick Content Provider
 - Clean Architecture
 - Koin
-- MVVM
 - Firebase Analytics
 - Crashlytics
