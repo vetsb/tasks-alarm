@@ -5,10 +5,6 @@ import android.content.Context
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.vetsb.tasksalarm.BuildConfig
 import com.vetsb.tasksalarm.analytics.analyticsModule
-import com.vetsb.tasksalarm.appconfig.appConfigModule
-import com.vetsb.tasksalarm.appconfig.domain.usecase.initialize.InitializeAppConfigUseCase
-import com.vetsb.tasksalarm.core.base.ext.launchSafe
-import com.vetsb.tasksalarm.core.base.ext.processLifecycleScope
 import com.vetsb.tasksalarm.core.coreModule
 import com.vetsb.tasksalarm.crashlytics.crashlyticsModule
 import com.vetsb.tasksalarm.crashlytics.domain.CrashlyticsTree
@@ -35,10 +31,6 @@ class AppDelegate : Application() {
         initTimber()
 
         AndroidThreeTen.init(this)
-
-        processLifecycleScope.launchSafe {
-            get<InitializeAppConfigUseCase>()()
-        }
     }
 
     private fun startKoin() {
@@ -48,7 +40,6 @@ class AppDelegate : Application() {
                 crashlyticsModule,
                 coreModule,
                 analyticsModule,
-                appConfigModule,
                 tasksModule,
                 speakerModule,
                 tasksSpeakerModule,
